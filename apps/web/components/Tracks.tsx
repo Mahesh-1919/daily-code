@@ -23,7 +23,6 @@ import {
   PaginationPrevious,
 } from "@repo/ui";
 import { motion } from "framer-motion";
-import { type } from "os";
 
 interface TrackPros extends Track {
   problems: Problem[];
