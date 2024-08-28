@@ -192,6 +192,7 @@ export async function getAllTracks() {
         createdAt: "asc",
       },
     });
+
     await cache.set("getAllTracks", [], tracks);
     return tracks.map((track: any) => ({
       ...track,

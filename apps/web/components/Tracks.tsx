@@ -23,6 +23,7 @@ import {
   PaginationPrevious,
 } from "@repo/ui";
 import { motion } from "framer-motion";
+import { type } from "os";
 
 interface TrackPros extends Track {
   problems: Problem[];
@@ -34,6 +35,8 @@ interface TrackPros extends Track {
   }[];
 }
 
+type Cohort = "Cohort2" | "Cohort3" | "Both";
+
 interface TracksWithCategoriesProps {
   tracks: TrackPros[];
   categories: { id: string; category: string }[];
@@ -43,10 +46,11 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
   const [selectedCategory, setSelectedCategory] = useRecoilState(category);
   const [filteredTracks, setFilteredTracks] = useState<TrackPros[]>(tracks);
   const [visibleTracks, setVisibleTracks] = useState<TrackPros[]>([]);
+  const [cohort, setCohort] = useState<Cohort>("Both");
   const [sortBy, setSortBy] = useState<string>("new");
-  const [cohort2, setCohort2] = useState<boolean>(false);
+
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
-  const [cohort3, setCohort3] = useState<boolean>(false);
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const tracksPerPage = 10;
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,10 +58,11 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
   const filterTracks = () => {
     setLoading(true);
     let newFilteredTracks = tracks;
-    if (cohort3) {
+
+    if (cohort === "Cohort3") {
       newFilteredTracks = newFilteredTracks.filter((t) => t.cohort === 3);
     }
-    if (cohort2) {
+    if (cohort === "Cohort2") {
       newFilteredTracks = newFilteredTracks.filter((t) => t.cohort === 2);
     }
     if (selectedCategory && selectedCategory !== "All") {
@@ -88,7 +93,7 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
 
   useEffect(() => {
     filterTracks();
-  }, [selectedCategory, cohort2, cohort3, tracks]);
+  }, [selectedCategory, tracks, cohort]);
 
   useEffect(() => {
     sortTracks(sortBy);
@@ -114,6 +119,14 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
     },
   };
 
+  const handleCohort = (cohortType: Cohort) => {
+    if (cohort === cohortType) {
+      setCohort("Both");
+    } else {
+      setCohort(cohortType);
+    }
+  };
+
   return (
     <motion.div
       initial={{ y: -20, opacity: 0 }}
@@ -127,8 +140,8 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
           <Button
             size={"lg"}
             variant={"ghost"}
-            onClick={() => setCohort2(!cohort2)}
-            className={cohort2 ? "bg-blue-600 text-white" : ""}
+            onClick={() => handleCohort("Cohort2")}
+            className={cohort === "Cohort2" ? "bg-blue-600 text-white" : ""}
           >
             Cohort 2.0
           </Button>
@@ -136,8 +149,8 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
           <Button
             size={"lg"}
             variant={"ghost"}
-            onClick={() => setCohort3(!cohort3)}
-            className={cohort3 ? "bg-blue-600 text-white" : ""}
+            onClick={() => handleCohort("Cohort3")}
+            className={cohort === "Cohort3" ? "bg-blue-600 text-white" : ""}
           >
             Cohort 3.0
           </Button>

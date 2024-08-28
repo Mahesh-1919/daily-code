@@ -3,6 +3,7 @@ const seedsData: any[] = [
     data: {
       id: "6SbPPXGkG8QKFOTW9BmL",
       title: "Typescript",
+
       description:
         "Learn about strongly typed languages, Typescript and how you can integrate it into your existing javascript codebase.",
       image:
